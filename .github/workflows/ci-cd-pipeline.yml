@@ -1,0 +1,59 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Le workflow sera déclenché lors d'un push vers la branche "main"
+  pull_request:
+    branches:
+      - main  # Le workflow sera aussi déclenché lors d'une demande de pull sur la branche "main"
+
+jobs:
+  # Job de build et tests
+  build:
+    runs-on: ubuntu-latest  # Utilisation d'un runner Ubuntu pour exécuter les jobs
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3  # Récupère le code source du dépôt
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build with Maven
+        run: mvn clean install  # Exécution de la commande Maven pour construire le projet
+
+      - name: Run unit tests
+        run: mvn test  # Exécution des tests unitaires avec Maven
+
+      - name: Run vulnerability scan
+        run: mvn dependency-check:check  # Vérification des vulnérabilités avec OWASP Dependency Check
+
+      - name: Generate Jacoco code coverage report
+        run: mvn jacoco:report  # Génération du rapport Jacoco pour la couverture de code
+
+  # Job d'analyse SonarQube (vous pouvez ajouter un job spécifique pour SonarQube)
+  sonarQube:
+    runs-on: ubuntu-latest
+    needs: build  # Ce job ne s'exécute qu'après la fin du job 'build'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+
+      - name: Run SonarQube analysis
+        run: mvn sonar:sonar -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }} # Utilisation des secrets pour la connexion à SonarQube
