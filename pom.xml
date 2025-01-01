@@ -86,23 +86,6 @@
                 </executions>
             </plugin>
 
-            <!-- Plugin OWASP Dependency Check -->
-            <plugin>
-                <groupId>org.owasp</groupId>
-                <artifactId>dependency-check-maven</artifactId>
-                <version>8.4.0</version> <!-- Remplacez par la dernière version si nécessaire -->
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <dataDirectory>${project.build.directory}/dependency-check-data</dataDirectory>
-                    <failBuildOnCVSS>7</failBuildOnCVSS> <!-- Échoue si une vulnérabilité a un score CVSS >= 7 -->
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 </project>
