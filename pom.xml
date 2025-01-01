@@ -16,7 +16,7 @@
     <properties>
         <java.version>11</java.version>
         <jacoco.version>0.8.7</jacoco.version>
-        <sonar.host.url>https://sonarqube.cedricmtta.com</sonar.host.url>
+        <sonar.host.url>https://sonarqube.cedricmtta.com</sonar.host.url> <!-- Vérifiez que l'URL est correcte -->
         <sonar.projectName>My Survey</sonar.projectName>
         <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
@@ -86,10 +86,25 @@
                 </executions>
             </plugin>
 
+            <!-- Plugin de SonarQube avec version explicite -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>4.0.0.4121</version> <!-- Version explicite -->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>sonar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Plugin OWASP Dependency-Check -->
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>6.2.2</version>
+                <version>6.2.2</version> <!-- Dernière version stable -->
                 <executions>
                     <execution>
                         <goals>
