@@ -14,15 +14,14 @@
     <name>MySurvey</name>
     <description>MySurvey</description>
     <properties>
-        <java.version>11</java.version>
-        <jacoco.version>0.8.7</jacoco.version>
-        <sonar.host.url>https://sonarqube.cedricmtta.com</sonar.host.url> <!-- Vérifiez que l'URL est correcte -->
+        <sonar.host.url>https://sonarqube.cedricmtta.com</sonar.host.url> <!-- Vérifiez cette ligne -->
         <sonar.projectName>My Survey</sonar.projectName>
         <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.language>java</sonar.language>
         <sonar.exclusions>**/MySurveyApplication.java, **/models/*.java, **/dtos/*.java</sonar.exclusions>
     </properties>
+
 
     <dependencies>
         <dependency>
