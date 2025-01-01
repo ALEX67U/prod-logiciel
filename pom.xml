@@ -90,10 +90,11 @@
             </plugin>
 
             <!-- Plugin de SonarQube avec version explicite -->
+
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
-                <version>4.0.0.4121</version> <!-- Version explicite -->
+                <version>4.0.0.4121</version>
                 <executions>
                     <execution>
                         <goals>
@@ -102,6 +103,8 @@
                     </execution>
                 </executions>
             </plugin>
+    
+
 
             <!-- Plugin OWASP Dependency-Check -->
             <plugin>
