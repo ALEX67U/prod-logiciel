@@ -115,7 +115,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>6.2.2</version> <!-- Dernière version stable -->
+                <version>6.4.1</version> <!-- Dernière version stable -->
                 <executions>
                     <execution>
                         <goals>
