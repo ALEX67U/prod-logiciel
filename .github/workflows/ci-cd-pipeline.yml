@@ -12,16 +12,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: mydatabase
+        ports:
+          - 5432:5432
 
+    steps:
+      # 1. Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Set up JDK 11
       - name: Set up JDK 11
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'adopt'
 
+      # 3. Cache Maven packages
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
@@ -30,22 +43,48 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      # 4. Linter/Formatter check
+      - name: Run Spotless Check
+        run: mvn spotless:check
+
+      # 5. Build with Maven
       - name: Build with Maven
         run: mvn clean install --settings settings.xml
 
-      - name: Run tests with Maven
+      # 6. Run unit tests
+      - name: Run unit tests
         run: mvn test
 
+      # 7. Wait for DB to be ready
+      - name: Wait for DB to be ready
+        run: |
+          sleep 10 # Wait for PostgreSQL to start
+
+      # 8. Run integration tests
+      - name: Run integration tests
+        run: mvn verify -DskipUnitTests
+
+      # 9. Run end-to-end tests (si applicable)
+      - name: Run E2E tests
+        run: mvn verify -De2eTests
+
+      # 10. Run vulnerability tests
+      - name: Run OWASP Dependency Check
+        run: mvn org.owasp:dependency-check-maven:check
+
+      # 11. Run Jacoco coverage report
       - name: Run Jacoco report
         run: mvn jacoco:report
 
+      # 12. SonarQube Scan
       - name: SonarQube Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn sonar:sonar
 
+      # 13. Deploy to Public Environment
       - name: Deploy to Production
         if: github.ref == 'refs/heads/main'
         run: |
-          echo "Déploiement de l'application..."
-          # Ajoutez ici vos commandes de déploiement, par exemple vers un serveur ou un service cloud
+          echo "Deploying the application to the public environment..."
+          # Commandes de déploiement spécifiques à votre environnement public
