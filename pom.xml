@@ -14,7 +14,7 @@
     <name>MySurvey</name>
     <description>MySurvey</description>
     <properties>
-        <java.version>18</java.version>
+        <java.version>11</java.version>
         <jacoco.version>0.8.7</jacoco.version>
         <sonar.host.url>https://sonarqube.cedricmtta.com</sonar.host.url>
         <sonar.projectName>My Survey</sonar.projectName>
@@ -69,6 +69,22 @@
             <groupId>org.openapitools</groupId>
             <artifactId>jackson-databind-nullable</artifactId>
             <version>0.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
         </dependency>
     </dependencies>
 
