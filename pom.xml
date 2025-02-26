@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>fr.univ.lorraine.ufr.mim.m2.gi</groupId>
-    <artifactId>MySurvey</artifactId>
+    <artifactId>MySurveyApplication</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>MySurvey</name>
     <description>MySurvey</description>
