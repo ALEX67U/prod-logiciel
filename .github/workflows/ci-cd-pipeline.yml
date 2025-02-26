@@ -45,7 +45,7 @@ jobs:
 
       # 4. Build avec Maven
       - name: Build avec Maven
-        run: mvn clean install --settings settings.xml
+        run: mvn clean install  # Suppression de settings.xml
 
       # 5. Exécuter les tests unitaires
       - name: Exécuter les tests unitaires
@@ -58,11 +58,11 @@ jobs:
 
       # 7. Exécuter les tests d'intégration
       - name: Exécuter les tests d'intégration
-        run: mvn verify -DskipUnitTests -Dtest=tests/**/*IntegrationTest.java
+        run: mvn verify -DskipUnitTests -Dtest=tests/**/*IT.java
 
       # 8. Exécuter les tests end-to-end (si applicable)
       - name: Exécuter les tests E2E
-        run: mvn verify -De2eTests -Dtest=tests/**/*E2eTest.java
+        run: mvn verify -De2eTests -Dtest=tests/**/*E2ETest.java
 
       # 9. Exécuter les tests de vulnérabilité
       - name: Exécuter OWASP Dependency Check
