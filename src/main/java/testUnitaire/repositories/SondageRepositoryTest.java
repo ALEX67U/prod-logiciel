@@ -4,7 +4,6 @@ import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.models.Sondage;
 import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.repositories.SondageRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -18,19 +17,18 @@ public class SondageRepositoryTest {
     @Mock
     private SondageRepository sondageRepository; // Mock du repository
 
-    @InjectMocks
-    private SondageRepositoryTest sondageRepositoryTest; // Injecter le mock dans la classe de test
-
     private Sondage sondage;
 
+    private String nom;
     @BeforeEach
     void setUp() {
+        nom = "Sondage Test";
         // Initialisation des objets
         MockitoAnnotations.openMocks(this);
 
         sondage = new Sondage();
         sondage.setSondageId(1L); // Définir un ID
-        sondage.setNom("Sondage Test");
+        sondage.setNom(nom);
         sondage.setDescription("Description du sondage");
     }
 
@@ -44,9 +42,14 @@ public class SondageRepositoryTest {
 
         // Vérification des résultats
         assertTrue(result.isPresent(), "Le sondage doit être présent");
-        assertEquals(1L, result.get().getSondageId(), "L'ID du sondage ne correspond pas");
-        assertEquals("Sondage Test", result.get().getNom(), "Le nom du sondage ne correspond pas");
+
+        result.ifPresent(sondageResult -> {
+            assertEquals(1L, sondageResult.getSondageId(), "L'ID du sondage ne correspond pas");
+            assertEquals(nom, sondageResult.getNom(), "Le nom du sondage ne correspond pas");
+        });
     }
+
+
 
     @Test
     void testSaveSondage() {
@@ -58,6 +61,6 @@ public class SondageRepositoryTest {
 
         // Vérification des résultats
         assertNotNull(savedSondage.getSondageId(), "L'ID du sondage ne doit pas être null");
-        assertEquals("Sondage Test", savedSondage.getNom(), "Le nom du sondage ne correspond pas");
+        assertEquals(nom, savedSondage.getNom(), "Le nom du sondage ne correspond pas");
     }
 }

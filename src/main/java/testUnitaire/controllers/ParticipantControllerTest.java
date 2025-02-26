@@ -1,5 +1,6 @@
-package fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.controllers;
+package testUnitaire.controllers;
 
+import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.controllers.ParticipantController;
 import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.dtos.ParticipantDto;
 import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.models.Participant;
 import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.services.ParticipantService;
@@ -10,12 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

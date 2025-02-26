@@ -30,6 +30,9 @@ class SondageE2ETest {
     private ParticipantDto createdParticipant;
     private SondageDto createdSondage;
 
+    // Constante pour éviter la duplication de l'URL de sondage
+    private static final String BASE_URL_SONDAGE = "/api/sondage/";
+
     @BeforeEach
     void setUp() throws Exception {
         // Créer un participant pour les tests
@@ -53,7 +56,7 @@ class SondageE2ETest {
         newSondage.setNom("Sondage de satisfaction");
         newSondage.setDescription("Ce sondage vise à évaluer la satisfaction des utilisateurs.");
 
-        String response = mockMvc.perform(MockMvcRequestBuilders.post("/api/sondage/")
+        String response = mockMvc.perform(MockMvcRequestBuilders.post(BASE_URL_SONDAGE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newSondage)))
                 .andExpect(status().isCreated())
@@ -66,13 +69,13 @@ class SondageE2ETest {
 
     @Test
     void testCreateSondage() throws Exception {
-        // Verifier la création d'un sondage
+        // Vérifier la création d'un sondage
         SondageDto newSondage = new SondageDto();
         newSondage.setCreateBy(createdParticipant.getParticipantId());
         newSondage.setNom("Nouveau sondage");
         newSondage.setDescription("Ce sondage est pour tester la création.");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/sondage/")
+        mockMvc.perform(MockMvcRequestBuilders.post(BASE_URL_SONDAGE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newSondage)))
                 .andExpect(status().isCreated())
@@ -83,7 +86,7 @@ class SondageE2ETest {
     @Test
     void testGetSondages() throws Exception {
         // Tester la récupération de sondages
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/sondage/")
+        mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL_SONDAGE)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]").isArray());
@@ -95,7 +98,7 @@ class SondageE2ETest {
         createdSondage.setNom("Sondage de satisfaction mis à jour");
         createdSondage.setDescription("Mise à jour du sondage pour évaluer la satisfaction des utilisateurs.");
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/sondage/" + createdSondage.getSondageId())
+        mockMvc.perform(MockMvcRequestBuilders.put(BASE_URL_SONDAGE + createdSondage.getSondageId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createdSondage)))
                 .andExpect(status().isOk())
@@ -106,7 +109,7 @@ class SondageE2ETest {
     @Test
     void testDeleteSondage() throws Exception {
         // Tester la suppression du sondage créé dans setUp
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/sondage/" + createdSondage.getSondageId())
+        mockMvc.perform(MockMvcRequestBuilders.delete(BASE_URL_SONDAGE + createdSondage.getSondageId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

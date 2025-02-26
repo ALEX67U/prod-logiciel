@@ -27,53 +27,52 @@ class DateSondageIntegrationTest {
     @Autowired
     private SondageRepository sondageRepository; // Ajout du repository Sondage
 
-    private Sondage sondage;
-    private DateSondage dateSondage;
-    private DateSondee dateSondee;
+    private Sondage existingSondage; // Renommé pour éviter le conflit
+    private DateSondage existingDateSondage; // Renommé pour éviter le conflit
+    private DateSondee existingDateSondee; // Renommé pour éviter le conflit
 
     @BeforeEach
     void setUp() {
-        sondage = new Sondage();
-        sondage.setNom("Sondage Test");
-        sondage = sondageRepository.save(sondage); // Sauvegarde le sondage
+        existingSondage = new Sondage();
+        existingSondage.setNom("Sondage Test");
+        existingSondage = sondageRepository.save(existingSondage); // Sauvegarde le sondage
 
-        dateSondee = new DateSondee();
-        dateSondee.setChoix("DISPONIBLE"); // Assurez-vous d'initialiser cette valeur
+        existingDateSondee = new DateSondee();
+        existingDateSondee.setChoix("DISPONIBLE"); // Assurez-vous d'initialiser cette valeur
 
-        dateSondage = new DateSondage();
-        dateSondage.setDate(new Date());
-        dateSondage.setSondage(sondage);
-        dateSondage.setDateSondee(Collections.singletonList(dateSondee));
+        existingDateSondage = new DateSondage();
+        existingDateSondage.setDate(new Date());
+        existingDateSondage.setSondage(existingSondage);
+        existingDateSondage.setDateSondee(Collections.singletonList(existingDateSondee));
     }
-
 
     @Test
     void testCreateDateSondage() {
         // Sauvegarder la DateSondage dans la base de données
-        DateSondage savedDateSondage = dateSondageRepository.save(dateSondage);
+        DateSondage savedDateSondage = dateSondageRepository.save(existingDateSondage);
 
         // Vérification après la sauvegarde
         assertNotNull(savedDateSondage.getDateSondageId()); // Assurez-vous que l'ID est généré
-        assertEquals(dateSondage.getDate(), savedDateSondage.getDate());
-        assertEquals(sondage.getNom(), savedDateSondage.getSondage().getNom());
-        assertEquals(dateSondage.getDateSondee(), savedDateSondage.getDateSondee());
+        assertEquals(existingDateSondage.getDate(), savedDateSondage.getDate());
+        assertEquals(existingSondage.getNom(), savedDateSondage.getSondage().getNom());
+        assertEquals(existingDateSondage.getDateSondee(), savedDateSondage.getDateSondee());
     }
 
     @Test
     void testUpdateDateSondage() {
         // Créer un sondage
-        Sondage sondage = new Sondage();
+        Sondage newSondage = new Sondage();
         // Configurez votre sondage ici si nécessaire
 
         // Créer et sauvegarder la date de sondage
-        DateSondage dateSondage = new DateSondage();
-        dateSondage.setDate(new Date()); // Ou une date spécifique
-        dateSondage.setSondage(sondage);
+        DateSondage newDateSondage = new DateSondage();
+        newDateSondage.setDate(new Date()); // Ou une date spécifique
+        newDateSondage.setSondage(newSondage);
 
         // Sauvegarder le sondage d'abord si vous avez une contrainte de clé étrangère
-        Sondage savedSondage = sondageRepository.save(sondage);
-        dateSondage.setSondage(savedSondage);
-        DateSondage savedDateSondage = dateSondageRepository.save(dateSondage);
+        Sondage savedSondage = sondageRepository.save(newSondage);
+        newDateSondage.setSondage(savedSondage);
+        DateSondage savedDateSondage = dateSondageRepository.save(newDateSondage);
 
         // Modifier la date de sondage
         Date newDate = new Date(); // ou une date différente pour la mise à jour
@@ -86,12 +85,10 @@ class DateSondageIntegrationTest {
         assertEquals(newDate, updatedDateSondage.getDate());
     }
 
-
-
     @Test
     void testDeleteDateSondage() {
         // Sauvegarder la DateSondage dans la base de données
-        DateSondage savedDateSondage = dateSondageRepository.save(dateSondage);
+        DateSondage savedDateSondage = dateSondageRepository.save(existingDateSondage);
 
         // Suppression
         dateSondageRepository.delete(savedDateSondage);

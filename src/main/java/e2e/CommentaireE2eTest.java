@@ -5,9 +5,6 @@ import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.MySurveyApplication;
 import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.dtos.CommentaireDto;
 import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.dtos.ParticipantDto;
 import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.dtos.SondageDto;
-import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.models.Commentaire;
-import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.models.Participant;
-import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.models.Sondage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +15,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = MySurveyApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -35,6 +31,13 @@ class CommentaireE2ETest {
 
     private ParticipantDto createdParticipant;
     private SondageDto createdSondage;
+
+    // Constantes pour éviter la duplication de chaînes
+    private static final String BASE_URL_SONDAGE = "/api/sondage/";
+    private static final String BASE_URL_COMMENTAIRES = "/commentaires";
+    private static final String EXCELLENT_PRODUIT_COMMENT = "C'est un excellent produit!";
+    private static final String COMMENTAIRE_MIS_A_JOUR = "Commentaire mis à jour!";
+    private static final String COMMENTAIRE_A_SUPPRIMER = "Commentaire à supprimer!";
 
     @BeforeEach
     void setUp() throws Exception {
@@ -59,7 +62,7 @@ class CommentaireE2ETest {
         newSondage.setNom("Sondage de satisfaction");
         newSondage.setDescription("Ce sondage vise à évaluer la satisfaction des utilisateurs.");
 
-        String response = mockMvc.perform(MockMvcRequestBuilders.post("/api/sondage/")
+        String response = mockMvc.perform(MockMvcRequestBuilders.post(BASE_URL_SONDAGE )
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newSondage)))
                 .andExpect(status().isCreated())
@@ -74,28 +77,24 @@ class CommentaireE2ETest {
     void testCreateCommentaire() throws Exception {
         // Créer un commentaire pour le sondage
         CommentaireDto newCommentaire = new CommentaireDto();
-        newCommentaire.setCommentaire("C'est un excellent produit!");
+        newCommentaire.setCommentaire(EXCELLENT_PRODUIT_COMMENT);
         newCommentaire.setParticipant(createdParticipant.getParticipantId());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/sondage/" + createdSondage.getSondageId() + "/commentaires")
+        mockMvc.perform(MockMvcRequestBuilders.post(BASE_URL_SONDAGE + createdSondage.getSondageId() + BASE_URL_COMMENTAIRES)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newCommentaire)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.commentaire").value("C'est un excellent produit!"));
+                .andExpect(jsonPath("$.commentaire").value(EXCELLENT_PRODUIT_COMMENT));
     }
-
-
-
 
     @Test
     void testUpdateCommentaire() throws Exception {
         // Créer un commentaire pour le sondage
         CommentaireDto newCommentaire = new CommentaireDto();
-        newCommentaire.setCommentaire("C'est un excellent produit!");
+        newCommentaire.setCommentaire(EXCELLENT_PRODUIT_COMMENT);
         newCommentaire.setParticipant(createdParticipant.getParticipantId());
 
-
-        String response = mockMvc.perform(MockMvcRequestBuilders.post("/api/sondage/" + createdSondage.getSondageId() + "/commentaires")
+        String response = mockMvc.perform(MockMvcRequestBuilders.post(BASE_URL_SONDAGE + createdSondage.getSondageId() + BASE_URL_COMMENTAIRES)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newCommentaire)))
                 .andExpect(status().isCreated())
@@ -104,23 +103,23 @@ class CommentaireE2ETest {
                 .getContentAsString();
 
         CommentaireDto createdCommentaire = objectMapper.readValue(response, CommentaireDto.class);
-        createdCommentaire.setCommentaire("Commentaire mis à jour!");
+        createdCommentaire.setCommentaire(COMMENTAIRE_MIS_A_JOUR);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/commentaire/" + createdCommentaire.getCommentaireId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createdCommentaire)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.commentaire").value("Commentaire mis à jour!"));
+                .andExpect(jsonPath("$.commentaire").value(COMMENTAIRE_MIS_A_JOUR));
     }
 
     @Test
     void testDeleteCommentaire() throws Exception {
         // Créer un commentaire pour le sondage
         CommentaireDto newCommentaire = new CommentaireDto();
-        newCommentaire.setCommentaire("Commentaire à supprimer!");
+        newCommentaire.setCommentaire(COMMENTAIRE_A_SUPPRIMER);
         newCommentaire.setParticipant(createdParticipant.getParticipantId());
 
-        String response = mockMvc.perform(MockMvcRequestBuilders.post("/api/sondage/" + createdSondage.getSondageId() + "/commentaires")
+        String response = mockMvc.perform(MockMvcRequestBuilders.post(BASE_URL_SONDAGE + createdSondage.getSondageId() + BASE_URL_COMMENTAIRES)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newCommentaire)))
                 .andExpect(status().isCreated())
@@ -135,7 +134,4 @@ class CommentaireE2ETest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
-
-
-
 }

@@ -11,9 +11,14 @@ class ParticipantDtoTest {
 
     private ParticipantDto participantDto;
 
+    private String nom;
+    private String prenom;
+
     @BeforeEach
     void setUp() {
         participantDto = new ParticipantDto();
+        nom = "Dupont";
+        prenom = "Jean";
     }
 
     @Test
@@ -25,14 +30,14 @@ class ParticipantDtoTest {
 
     @Test
     void testGetSetNom() {
-        String nom = "Dupont";
+
         participantDto.setNom(nom);
         assertEquals(nom, participantDto.getNom());
     }
 
     @Test
     void testGetSetPrenom() {
-        String prenom = "Jean";
+
         participantDto.setPrenom(prenom);
         assertEquals(prenom, participantDto.getPrenom());
     }
@@ -41,13 +46,13 @@ class ParticipantDtoTest {
     void testEqualsAndHashCode() {
         ParticipantDto participantDto1 = new ParticipantDto();
         participantDto1.setParticipantId(1L);
-        participantDto1.setNom("Dupont");
-        participantDto1.setPrenom("Jean");
+        participantDto1.setNom(nom);
+        participantDto1.setPrenom(prenom);
 
         ParticipantDto participantDto2 = new ParticipantDto();
         participantDto2.setParticipantId(1L);
-        participantDto2.setNom("Dupont");
-        participantDto2.setPrenom("Jean");
+        participantDto2.setNom(nom);
+        participantDto2.setPrenom(prenom);
 
         assertEquals(participantDto1, participantDto2);
         assertEquals(participantDto1.hashCode(), participantDto2.hashCode());
@@ -57,8 +62,8 @@ class ParticipantDtoTest {
     void testNotEquals() {
         ParticipantDto participantDto1 = new ParticipantDto();
         participantDto1.setParticipantId(1L);
-        participantDto1.setNom("Dupont");
-        participantDto1.setPrenom("Jean");
+        participantDto1.setNom(nom);
+        participantDto1.setPrenom(prenom);
 
         ParticipantDto participantDto2 = new ParticipantDto();
         participantDto2.setParticipantId(2L); // different participantId
@@ -69,8 +74,8 @@ class ParticipantDtoTest {
     @Test
     void testToString() {
         participantDto.setParticipantId(1L);
-        participantDto.setNom("Dupont");
-        participantDto.setPrenom("Jean");
+        participantDto.setNom(nom);
+        participantDto.setPrenom(prenom);
 
         String expectedToString = "ParticipantDto{participantId=1, nom='Dupont', prenom='Jean'}";
         assertEquals(expectedToString, participantDto.toString());

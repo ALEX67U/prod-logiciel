@@ -1,21 +1,14 @@
 package testIntegration.configurations;
 
 import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.MySurveyApplication;
-import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.configurations.ModelMapperConfig;
 import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.dtos.CommentaireDto;
 import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.models.Commentaire;
 import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.models.Participant;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
-
 import static org.junit.jupiter.api.Assertions.*;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = MySurveyApplication.class) // Utilisez votre classe principale de l'application
 class ModelMapperIntegrationIntegrationTest {

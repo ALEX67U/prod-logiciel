@@ -24,7 +24,6 @@ class ParticipantIntegrationTest {
 
     private Participant participant1;
 
-
     @BeforeEach
     void setUp() {
         // Création et sauvegarde de participants avant chaque test
@@ -36,9 +35,13 @@ class ParticipantIntegrationTest {
     void testParticipantInsert() {
         // Vérification de la persistance des participants créés dans setUp()
         Participant retrievedParticipant = participantRepository.findById(participant1.getParticipantId()).orElse(null);
+
+        // Vérification que retrievedParticipant n'est pas null avant d'accéder à ses propriétés
         assertThat(retrievedParticipant).isNotNull();
-        assertThat(retrievedParticipant.getNom()).isEqualTo("John");
-        assertThat(retrievedParticipant.getPrenom()).isEqualTo("Doe");
+        if (retrievedParticipant != null) {
+            assertThat(retrievedParticipant.getNom()).isEqualTo("John");
+            assertThat(retrievedParticipant.getPrenom()).isEqualTo("Doe");
+        }
     }
 
     @Test

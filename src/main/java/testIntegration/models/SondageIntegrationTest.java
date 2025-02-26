@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest(classes = MySurveyApplication.class)
 @Transactional
 class SondageIntegrationTest {
@@ -64,10 +65,12 @@ class SondageIntegrationTest {
         Sondage retrieved = sondageRepository.findById(sondage.getSondageId()).orElse(null);
 
         // Vérifier les valeurs
-        assertThat(retrieved).isNotNull();
-        assertThat(retrieved.getNom()).isEqualTo("Sondage Test");
-        assertThat(retrieved.getDescription()).isEqualTo("Description du sondage");
-        assertThat(retrieved.getCreateBy()).isEqualTo(createBy);
+        assertThat(retrieved).isNotNull(); // Vérification de la non-nullité
+        if (retrieved != null) {
+            assertThat(retrieved.getNom()).isEqualTo("Sondage Test");
+            assertThat(retrieved.getDescription()).isEqualTo("Description du sondage");
+            assertThat(retrieved.getCreateBy()).isEqualTo(createBy);
+        }
     }
 
     @Test
@@ -80,10 +83,13 @@ class SondageIntegrationTest {
 
         // Vérifier la mise à jour
         Sondage updated = sondageRepository.findById(sondage.getSondageId()).orElse(null);
-        assertThat(updated).isNotNull();
-        assertThat(updated.getNom()).isEqualTo("Sondage Modifié");
-        assertThat(updated.getDescription()).isEqualTo("Nouvelle description");
-        assertThat(updated.getCloture()).isTrue();
+
+        assertThat(updated).isNotNull(); // Vérification de la non-nullité
+        if (updated != null) {
+            assertThat(updated.getNom()).isEqualTo("Sondage Modifié");
+            assertThat(updated.getDescription()).isEqualTo("Nouvelle description");
+            assertThat(updated.getCloture()).isTrue();
+        }
     }
 
     @Test
@@ -114,9 +120,11 @@ class SondageIntegrationTest {
 
         // Vérifier les relations
         Sondage retrieved = sondageRepository.findById(sondage.getSondageId()).orElse(null);
-        assertThat(retrieved).isNotNull();
-        assertThat(retrieved.getCommentaires()).hasSize(1);
-        assertThat(retrieved.getDateSondage()).hasSize(1);
-    }
 
+        assertThat(retrieved).isNotNull(); // Vérification de la non-nullité
+        if (retrieved != null) {
+            assertThat(retrieved.getCommentaires()).hasSize(1);
+            assertThat(retrieved.getDateSondage()).hasSize(1);
+        }
+    }
 }

@@ -9,17 +9,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ParticipantRepositoryTest {
 
     @Mock
     private ParticipantRepository participantRepository; // Mock du repository
 
-    @InjectMocks
-    private ParticipantRepositoryTest participantRepositoryTest; // Injecter le mock
 
     private Participant participant;
 
@@ -34,16 +33,15 @@ public class ParticipantRepositoryTest {
     }
 
     @Test
-    void testFindById() {
-        // Configuration du mock pour renvoyer un participant spécifique
-        when(participantRepository.findById(1L)).thenReturn(java.util.Optional.of(participant));
+    void testFindByIdWhenParticipantNotFound() {
+        // Configuration du mock pour renvoyer un participant vide
+        when(participantRepository.findById(2L)).thenReturn(java.util.Optional.empty());
 
         // Appel de la méthode du repository
-        Participant result = participantRepository.findById(1L).orElse(null);
+        Optional<Participant> resultOptional = participantRepository.findById(2L);
 
-        // Vérification des résultats
-        assertNotNull(result, "Le participant ne doit pas être null");
-        assertEquals(1L, result.getParticipantId(), "L'ID du participant ne correspond pas");
-        assertEquals("Test Participant", result.getNom(), "Le nom du participant ne correspond pas");
+        // Vérification que le participant n'est pas présent
+        assertFalse(resultOptional.isPresent(), "Le participant ne doit pas être présent");
     }
+
 }
