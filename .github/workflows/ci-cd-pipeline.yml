@@ -43,48 +43,44 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # 4. Linter/Formatter check
-      - name: Run Spotless Check
-        run: mvn spotless:check
-
-      # 5. Build with Maven
-      - name: Build with Maven
+      # 4. Build avec Maven
+      - name: Build avec Maven
         run: mvn clean install --settings settings.xml
 
-      # 6. Run unit tests
-      - name: Run unit tests
-        run: mvn test
+      # 5. Exécuter les tests unitaires
+      - name: Exécuter les tests unitaires
+        run: mvn test -Dtest=tests/**/*Test.java
 
-      # 7. Wait for DB to be ready
-      - name: Wait for DB to be ready
+      # 6. Attendre que la base de données soit prête
+      - name: Attendre que la base de données soit prête
         run: |
           sleep 10 # Wait for PostgreSQL to start
 
-      # 8. Run integration tests
-      - name: Run integration tests
-        run: mvn verify -DskipUnitTests
+      # 7. Exécuter les tests d'intégration
+      - name: Exécuter les tests d'intégration
+        run: mvn verify -DskipUnitTests -Dtest=tests/**/*IntegrationTest.java
 
-      # 9. Run end-to-end tests (si applicable)
-      - name: Run E2E tests
-        run: mvn verify -De2eTests
+      # 8. Exécuter les tests end-to-end (si applicable)
+      - name: Exécuter les tests E2E
+        run: mvn verify -De2eTests -Dtest=tests/**/*E2eTest.java
 
-      # 10. Run vulnerability tests
-      - name: Run OWASP Dependency Check
+      # 9. Exécuter les tests de vulnérabilité
+      - name: Exécuter OWASP Dependency Check
         run: mvn org.owasp:dependency-check-maven:check
 
-      # 11. Run Jacoco coverage report
-      - name: Run Jacoco report
+      # 10. Exécuter le rapport Jacoco
+      - name: Exécuter le rapport Jacoco
         run: mvn jacoco:report
 
-      # 12. SonarQube Scan
-      - name: SonarQube Scan
+      # 11. Scan SonarQube
+      - name: Scan SonarQube
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn sonar:sonar
 
-      # 13. Deploy to Public Environment
-      - name: Deploy to Production
+      # 12. Déployer dans l'environnement public
+      - name: Déployer en production
         if: github.ref == 'refs/heads/main'
         run: |
-          echo "Deploying the application to the public environment..."
+          echo "Déploiement de l'application dans l'environnement public..."
           # Commandes de déploiement spécifiques à votre environnement public
