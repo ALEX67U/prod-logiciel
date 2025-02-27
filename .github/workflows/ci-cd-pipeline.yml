@@ -76,12 +76,8 @@ jobs:
       - name: Scan SonarCloud
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn clean verify sonar:sonar \
-          -Dsonar.projectKey=ALEX67U_prod-logiciel \
-          -Dsonar.organization=ALEX67U \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-
+        run: mvn clean verify sonar:sonar -Dsonar.projectKey=ALEX67U_prod-logiciel -Dsonar.organization=ALEX67U -Dsonar.host.url=https://sonarcloud.io -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+      
       # 12. Déployer dans l'environnement public
       - name: Déployer en production
         if: github.ref == 'refs/heads/main'
