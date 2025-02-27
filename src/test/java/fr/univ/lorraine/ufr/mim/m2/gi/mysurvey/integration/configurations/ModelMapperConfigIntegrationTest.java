@@ -9,8 +9,9 @@ import org.modelmapper.ModelMapper;
 import static org.junit.jupiter.api.Assertions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
+import javax.transaction.Transactional;
 @SpringBootTest(classes = MySurveyApplication.class) // Utilisez votre classe principale de l'application
+@Transactional
 class ModelMapperIntegrationIntegrationTest {
 
     @Autowired

@@ -4,6 +4,7 @@
   "threads": 8,
   "output-type": "json",
   "incremental": false,
+  "sourcetree-root": "",
   "force-rebuild": false,
   "disable-cache": false,
   "exclude": [],
