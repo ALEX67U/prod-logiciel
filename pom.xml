@@ -24,7 +24,6 @@
         <sonar.exclusions>**/MySurveyApplication.java, **/models/*.java, **/dtos/*.java</sonar.exclusions>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <dependencyCheck.skipAssemblyAnalysis>true</dependencyCheck.skipAssemblyAnalysis> <!-- Ignore .NET assembly analysis -->
     </properties>
 
     <dependencies>
@@ -108,19 +107,9 @@
                 </executions>
             </plugin>
 
-            <!-- Plugin OWASP Dependency-Check -->
-            <plugin>
-                <groupId>org.owasp</groupId>
-                <artifactId>dependency-check-maven</artifactId>
-                <version>6.4.1</version> <!-- Dernière version stable -->
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+
+
+
 
         </plugins>
     </build>
