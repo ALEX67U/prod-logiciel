@@ -1,19 +1,28 @@
-FROM openjdk:11
+# Étape 1 : Build (multi-stage build)
+FROM maven:3.8.6-openjdk-11 AS build
+
 WORKDIR /app
 
-# Copier juste le pom.xml pour installer les dépendances
+# Copier le pom.xml pour résoudre les dépendances Maven
 COPY pom.xml .
-RUN apt-get update && apt-get install -y maven
+
+# Résoudre les dépendances Maven sans copier tout le code source
 RUN mvn dependency:resolve
 
-# Copier uniquement le code source (sans target ni fichiers sensibles)
+# Copier le code source après avoir résolu les dépendances
 COPY src/ ./src/
 
 # Build de l'application
 RUN mvn clean package -DskipTests
 
-# Copier le JAR final dans le conteneur
-COPY target/*.jar app.jar
+# Étape 2 : Image finale
+FROM openjdk:11-jre-slim
 
+# Copier le JAR généré depuis l'étape de build
+COPY --from=build /app/target/*.jar app.jar
+
+# Exposer le port 8080
 EXPOSE 8080
+
+# Commande pour démarrer l'application
 CMD ["java", "-jar", "app.jar"]
