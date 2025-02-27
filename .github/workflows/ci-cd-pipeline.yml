@@ -72,7 +72,7 @@ jobs:
       - name: Exécuter le rapport Jacoco
         run: mvn jacoco:report
 
-      # 11. Construire l'image Docker avec le .jar généré
+      # 11. Construire l'image Docker avec le .jar génér
       - name: Build Docker Image
         run: |
           # Vérifie si le fichier .jar existe
@@ -80,9 +80,10 @@ jobs:
             echo "Le fichier .jar n'a pas été généré, arrêt du pipeline";
             exit 1;
           fi
-          
-          # Construire l'image Docker
-          docker build -t my-app ./src/main/resources
+
+          # Construire l'image Docker en spécifiant le chemin du Dockerfile et le contexte
+          docker build -f src/main/resources/Dockerfile -t my-app .
+      
 
       # 12. Pousser le code vers Render pour un déploiement automatique
       - name: Push code to Render
