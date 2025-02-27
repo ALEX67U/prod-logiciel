@@ -74,7 +74,9 @@ jobs:
 
       # 12. Construire l'image Docker avec le .jar généré
       - name: Build Docker Image
-        run: docker build -t my-app .
+        run: |
+          cd ./src/main/resources
+          docker build -t my-app .
 
       # 13. Pousser le code vers Render pour qu'il déploie automatiquement
       - name: Push code to Render
