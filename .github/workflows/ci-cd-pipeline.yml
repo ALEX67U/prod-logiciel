@@ -49,7 +49,7 @@ jobs:
 
       # 5. Exécuter les tests unitaires
       - name: Exécuter les tests unitaires
-        run: mvn test -Dtest=test/**/*Test.java
+        run: mvn test -Dtest=src/test/java/fr/univ/lorraine/ufr/mim/m2/gi/mysurvey/unit/**/*Test.java
 
       # 6. Attendre que la base de données soit prête
       - name: Attendre que la base de données soit prête
