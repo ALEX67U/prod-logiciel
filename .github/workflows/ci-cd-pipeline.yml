@@ -43,7 +43,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # 4. Build avec Maven
+      # 4. Build avec Maven (nettoie et génère le fichier .jar)
       - name: Build avec Maven
         run: mvn clean install
 
@@ -72,13 +72,19 @@ jobs:
       - name: Exécuter le rapport Jacoco
         run: mvn jacoco:report
 
-      # 12. Construire l'image Docker avec le .jar généré
+      # 11. Construire l'image Docker avec le .jar généré
       - name: Build Docker Image
         run: |
-          cd ./src/main/resources
-          docker build -t my-app .
+          # Vérifie si le fichier .jar existe
+          if [ ! -f target/*.jar ]; then
+            echo "Le fichier .jar n'a pas été généré, arrêt du pipeline";
+            exit 1;
+          fi
+          
+          # Construire l'image Docker
+          docker build -t my-app ./src/main/resources
 
-      # 13. Pousser le code vers Render pour qu'il déploie automatiquement
+      # 12. Pousser le code vers Render pour un déploiement automatique
       - name: Push code to Render
         if: github.ref == 'refs/heads/main'
         run: |
@@ -86,8 +92,9 @@ jobs:
           git add .
           git commit -m "Trigger Render deployment"
           git push origin main
-      # 11. Scan SonarCloud (pas besoin avec le mode automatique de SonarCloud https://sonarcloud.io/project/overview?id=ALEX67U_prod-logiciel)
+
+        # 13. Scan SonarCloud (commenté si tu veux l'activer)
         # - name: Scan SonarCloud
         # env:
-        # SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        #   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         # run: mvn verify sonar:sonar -Dsonar.projectKey=prod_logiciel -Dsonar.organization=ALEX67U -Dsonar.host.url=https://sonarcloud.io
