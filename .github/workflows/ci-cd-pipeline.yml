@@ -72,11 +72,11 @@ jobs:
       - name: Exécuter le rapport Jacoco
         run: mvn jacoco:report
 
-      # 11. Scan SonarCloud
-      - name: Scan SonarCloud
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn verify sonar:sonar -Dsonar.projectKey=ALEX67U_prod-logiciel -Dsonar.organization=ALEX67U -Dsonar.host.url=https://sonarcloud.io -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+      # 11. Scan SonarCloud (pas besoin avec le mode automatique de SonarCloud https://sonarcloud.io/project/overview?id=ALEX67U_prod-logiciel)
+        # - name: Scan SonarCloud
+        # env:
+        # SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        # run: mvn verify sonar:sonar -Dsonar.projectKey=prod_logiciel -Dsonar.organization=ALEX67U -Dsonar.host.url=https://sonarcloud.io
 
       # 12. Déployer dans l'environnement public
       - name: Déployer en production
