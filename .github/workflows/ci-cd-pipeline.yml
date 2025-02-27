@@ -79,7 +79,7 @@ jobs:
 
       # 12. Construction de l'image Docker
       - name: Construire l'image Docker
-        run: docker build -f ./Dockerfile -t my-app ./  # Le point fait référence au répertoire courant
+        run: docker build -t my-app .  # Le point fait référence au répertoire courant
 
 
       # 13. Déploiement automatique sur Render
