@@ -45,11 +45,11 @@ jobs:
 
       # 4. Build avec Maven
       - name: Build avec Maven
-        run: mvn clean install  # Suppression de settings.xml
+        run: mvn clean install
 
       # 5. Exécuter les tests unitaires
       - name: Exécuter les tests unitaires
-        run: mvn test -Dtest=src/test/java/fr/univ/lorraine/ufr/mim/m2/gi/mysurvey/unit/**/*Test.java
+        run: mvn test -Dtest=**/*Test.java
 
       # 6. Attendre que la base de données soit prête
       - name: Attendre que la base de données soit prête
@@ -58,11 +58,11 @@ jobs:
 
       # 7. Exécuter les tests d'intégration
       - name: Exécuter les tests d'intégration
-        run: mvn verify -DskipUnitTests -Dtest=test/**/*IT.java
+        run: mvn verify -DskipUnitTests -Dtest=**/*IntegrationTest.java
 
       # 8. Exécuter les tests end-to-end (si applicable)
       - name: Exécuter les tests E2E
-        run: mvn verify -De2eTests -Dtest=test/**/*E2ETest.java
+        run: mvn verify -De2eTests -Dtest=**/*E2eTest.java
 
       # 9. Exécuter les tests de vulnérabilité
       - name: Exécuter OWASP Dependency Check
