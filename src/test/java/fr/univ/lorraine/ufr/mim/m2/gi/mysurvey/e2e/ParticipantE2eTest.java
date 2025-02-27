@@ -3,6 +3,7 @@ package fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.e2e;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.MySurveyApplication;
 import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.dtos.ParticipantDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,38 +27,13 @@ class ParticipantE2eTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // Constantes pour éviter la duplication de chaînes
     private static final String BASE_URL_PARTICIPANT = "/api/participant/";
     private static final String PARTICIPANT_FIRST_NAME = "Charlie";
     private static final String PARTICIPANT_LAST_NAME = "Brown";
-    private static final String UPDATED_FIRST_NAME = "Paul";
-    private static final String UPDATED_LAST_NAME = "Doe";
+    private Long participantId; // ID du participant créé pour les tests
 
-    @Test
-    void testCreateParticipant() throws Exception {
-        ParticipantDto newParticipant = new ParticipantDto();
-        newParticipant.setNom(PARTICIPANT_LAST_NAME);
-        newParticipant.setPrenom(PARTICIPANT_FIRST_NAME);
-
-        mockMvc.perform(MockMvcRequestBuilders.post(BASE_URL_PARTICIPANT)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(newParticipant)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.nom").value(PARTICIPANT_LAST_NAME))
-                .andExpect(jsonPath("$.prenom").value(PARTICIPANT_FIRST_NAME));
-    }
-
-    @Test
-    void testGetParticipants() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL_PARTICIPANT)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[*]").isArray());
-    }
-
-    @Test
-    void testUpdateParticipant() throws Exception {
-        // Créer un participant d'abord
+    @BeforeEach
+    void setup() throws Exception {
         ParticipantDto newParticipant = new ParticipantDto();
         newParticipant.setNom(PARTICIPANT_LAST_NAME);
         newParticipant.setPrenom(PARTICIPANT_FIRST_NAME);
@@ -70,25 +46,56 @@ class ParticipantE2eTest {
                 .getResponse()
                 .getContentAsString();
 
-        // Extraire l'ID du participant créé
         ParticipantDto createdParticipant = objectMapper.readValue(response, ParticipantDto.class);
+        participantId = createdParticipant.getParticipantId();
+    }
 
-        // Mettre à jour le participant
-        createdParticipant.setNom(UPDATED_LAST_NAME);
-        createdParticipant.setPrenom(UPDATED_FIRST_NAME);
+    @Test
+    void testCreateParticipant() throws Exception {
+        ParticipantDto newParticipant = new ParticipantDto();
+        newParticipant.setNom("Smith");
+        newParticipant.setPrenom("Alice");
 
-        mockMvc.perform(MockMvcRequestBuilders.put(BASE_URL_PARTICIPANT + createdParticipant.getParticipantId())
+        mockMvc.perform(MockMvcRequestBuilders.post(BASE_URL_PARTICIPANT)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createdParticipant)))
+                        .content(objectMapper.writeValueAsString(newParticipant)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.nom").value("Smith"))
+                .andExpect(jsonPath("$.prenom").value("Alice"));
+    }
+
+    @Test
+    void testGetParticipants() throws Exception {
+        // Vérifier que le participant existe via son ID
+        mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL_PARTICIPANT + participantId)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.nom").value(UPDATED_LAST_NAME));
+                .andExpect(jsonPath("$.participantId").value(participantId))
+                .andExpect(jsonPath("$.nom").value(PARTICIPANT_LAST_NAME))
+                .andExpect(jsonPath("$.prenom").value(PARTICIPANT_FIRST_NAME));
+    }
+
+    @Test
+    void testUpdateParticipant() throws Exception {
+        ParticipantDto updatedParticipant = new ParticipantDto();
+        updatedParticipant.setParticipantId(participantId);
+        updatedParticipant.setNom("Doe");
+        updatedParticipant.setPrenom("Paul");
+
+        mockMvc.perform(MockMvcRequestBuilders.put(BASE_URL_PARTICIPANT + participantId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedParticipant)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nom").value("Doe"))
+                .andExpect(jsonPath("$.prenom").value("Paul"));
     }
 
     @Test
     void testDeleteParticipant() throws Exception {
-        // Supprimer un participant par ID (doit être remplacé par un ID existant dans votre base de données pour les tests)
-        mockMvc.perform(MockMvcRequestBuilders.delete(BASE_URL_PARTICIPANT + "1")
+        mockMvc.perform(MockMvcRequestBuilders.delete(BASE_URL_PARTICIPANT + participantId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+
+        
     }
 }
