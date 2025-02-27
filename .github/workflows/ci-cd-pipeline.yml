@@ -23,18 +23,18 @@ jobs:
           - 5432:5432
 
     steps:
-      # 1. Checkout code
+      # 1. Checkout du code du repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2. Set up JDK 11
+      # 2. Configuration de JDK 11 pour le build Maven
       - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'adopt'
 
-      # 3. Cache Maven packages
+      # 3. Mise en cache des dépendances Maven
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
@@ -43,40 +43,45 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # 4. Build avec Maven (nettoie et génère le fichier .jar)
+      # 4. Exécution du build Maven (compilation, tests unitaires, génération du fichier .jar)
       - name: Build avec Maven
         run: mvn clean install
 
-      # 5. Exécuter les tests unitaires
+      # 5. Exécution des tests unitaires
       - name: Exécuter les tests unitaires
         run: mvn test -Dtest=**/*Test.java
 
-      # 6. Attendre que la base de données soit prête
+      # 6. Attendre que la base de données PostgreSQL soit prête
       - name: Attendre que la base de données soit prête
         run: |
           sleep 10 # Wait for PostgreSQL to start
 
-      # 7. Exécuter les tests d'intégration
+      # 7. Exécution des tests d'intégration
       - name: Exécuter les tests d'intégration
         run: mvn verify -DskipUnitTests -Dtest=**/*IntegrationTest.java
 
-      # 8. Exécuter les tests end-to-end (si applicable)
+      # 8. Exécution des tests end-to-end (si applicable)
       - name: Exécuter les tests E2E
         run: mvn verify -De2eTests -Dtest=**/*E2eTest.java
 
-      # 9. Exécuter les tests de vulnérabilité
+      # 9. Exécution des tests de sécurité (OWASP Dependency Check)
       - name: Exécuter OWASP Dependency Check
         run: mvn org.owasp:dependency-check-maven:check
 
-      # 10. Exécuter le rapport Jacoco
+      # 10. Exécution du rapport de couverture de code Jacoco
       - name: Exécuter le rapport Jacoco
         run: mvn jacoco:report
 
-      # 11. Construire l'image Docker avec le .jar généré
-      - name: Build Docker Image
-        run: docker build -t my-app .
+      # 11. Vérification que le fichier .jar est bien généré
+      - name: Vérifier si le fichier .jar existe
+        run: |
+          ls -lh target/*.jar
 
-      # 12. Pousser le code vers Render pour un déploiement automatique
+      # 12. Construction de l'image Docker
+      - name: Build Docker Image
+        run: docker build -f ./Dockerfile -t my-app .
+
+      # 13. Déploiement automatique sur Render
       - name: Trigger Render deployment
         if: github.ref == 'refs/heads/main'
         run: |
@@ -85,7 +90,7 @@ jobs:
           -d '{}' \
           https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys
 
-      # 13. Scan SonarCloud (commenté si tu veux l'activer)
+      # 14. Scan SonarCloud (optionnel, commenté ici)
       # - name: Scan SonarCloud
       # env:
       #   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
