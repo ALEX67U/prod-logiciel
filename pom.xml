@@ -16,7 +16,9 @@
     <properties>
         <java.version>11</java.version>
         <jacoco.version>0.8.7</jacoco.version>
-        <sonar.host.url>https://sonarqube.cedricmtta.com</sonar.host.url>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.organization>ALEX67U</sonar.organization>
+        <sonar.projectKey>ALEX67U_prod-logiciel</sonar.projectKey>
         <sonar.projectName>My Survey</sonar.projectName>
         <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
