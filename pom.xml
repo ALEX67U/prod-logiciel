@@ -14,7 +14,7 @@
     <name>MySurvey</name>
     <description>MySurvey</description>
     <properties>
-        <java.version>17</java.version> <!-- Changement ici pour Java 17 -->
+        <java.version>11</java.version> <!-- Changement ici pour Java 17 -->
         <jacoco.version>0.8.7</jacoco.version>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.organization>ALEX67U</sonar.organization>
@@ -24,9 +24,9 @@
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.language>java</sonar.language>
         <sonar.exclusions>**/MySurveyApplication.java, **/models/*.java, **/dtos/*.java</sonar.exclusions>
-        <maven.compiler.source>17</maven.compiler.source> <!-- Changement ici pour Java 17 -->
-        <maven.compiler.target>17</maven.compiler.target> <!-- Changement ici pour Java 17 -->
-        <sonar.java.source>17</sonar.java.source> <!-- Changement ici pour Java 17 -->
+        <maven.compiler.source>11</maven.compiler.source> <!-- Changement ici pour Java 17 -->
+        <maven.compiler.target>11</maven.compiler.target> <!-- Changement ici pour Java 17 -->
+        <sonar.java.source>11</sonar.java.source> <!-- Changement ici pour Java 17 -->
     </properties>
 
     <dependencies>
@@ -77,11 +77,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>4.0.0.4121</version> <!-- Version explicite du plugin -->
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
