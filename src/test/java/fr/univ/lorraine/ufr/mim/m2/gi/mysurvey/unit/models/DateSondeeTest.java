@@ -10,58 +10,84 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Classe de test pour la classe DateSondee.
+ *
+ * Cette classe teste les fonctionnalités de construction, de récupération,
+ * et de mise à jour des propriétés de l'objet DateSondee.
+ */
 class DateSondeeTest {
 
     private DateSondee dateSondee;
     private DateSondage dateSondage;
     private Participant participant;
 
+    /**
+     * Configuration initiale avant chaque test.
+     * Crée des objets simulés pour les entités associées et initialise DateSondee.
+     */
     @BeforeEach
     void setUp() {
-        // Creating mock objects for related entities
+        // Création d'objets simulés pour les entités associées
         dateSondage = mock(DateSondage.class);
         participant = mock(Participant.class);
 
-        // Initialize DateSondee
+        // Initialisation de DateSondee
         dateSondee = new DateSondee(1L, dateSondage, participant, Choix.DISPONIBLE);
     }
 
+    /**
+     * Teste le constructeur et les accesseurs de DateSondee.
+     * Vérifie que les valeurs sont correctement définies lors de l'initialisation.
+     */
     @Test
     void testConstructorAndGetters() {
-        // Verify the constructor and getters are working as expected
+        // Vérifier que le constructeur et les accesseurs fonctionnent comme prévu
         assertNotNull(dateSondee);
         assertEquals(1L, dateSondee.getDateSondeeId());
         assertEquals(dateSondage, dateSondee.getDateSondage());
         assertEquals(participant, dateSondee.getParticipant());
-        assertEquals("DISPONIBLE", dateSondee.getChoix()); // Choix is converted to String
+        assertEquals(Choix.DISPONIBLE.toString(), dateSondee.getChoix()); // Choix est converti en String
     }
 
+    /**
+     * Teste le setter et l'accesseur pour le choix.
+     * Vérifie que la mise à jour du choix fonctionne correctement.
+     */
     @Test
     void testSetChoix() {
-        // Test the setter and getter for 'choix'
-        dateSondee.setChoix("PEUTETRE");
-        assertEquals("PEUTETRE", dateSondee.getChoix());
+        // Teste le setter et l'accesseur pour 'choix'
+        dateSondee.setChoix(Choix.PEUTETRE.toString());
+        assertEquals(Choix.PEUTETRE.toString(), dateSondee.getChoix());
     }
 
+    /**
+     * Teste la gestion des valeurs de choix invalides.
+     * Vérifie que l'appel d'une valeur invalide lance une IllegalArgumentException.
+     */
     @Test
     void testSetInvalidChoix() {
-        // Test invalid choix value (should throw IllegalArgumentException)
+        // Teste une valeur de choix invalide (doit lancer IllegalArgumentException)
         assertThrows(IllegalArgumentException.class, () -> {
             dateSondee.setChoix("INVALID");
         });
     }
 
+    /**
+     * Teste les accesseurs et les mutateurs de DateSondee.
+     * Vérifie que les valeurs peuvent être définies et récupérées correctement.
+     */
     @Test
     void testSettersAndGetters() {
-        // Test setters and getters
+        // Test des mutateurs et accesseurs
         dateSondee.setDateSondeeId(2L);
         dateSondee.setDateSondage(dateSondage);
         dateSondee.setParticipant(participant);
-        dateSondee.setChoix("INDISPONIBLE");
+        dateSondee.setChoix(Choix.INDISPONIBLE.toString());
 
         assertEquals(2L, dateSondee.getDateSondeeId());
         assertEquals(dateSondage, dateSondee.getDateSondage());
         assertEquals(participant, dateSondee.getParticipant());
-        assertEquals("INDISPONIBLE", dateSondee.getChoix());
+        assertEquals(Choix.INDISPONIBLE.toString(), dateSondee.getChoix());
     }
 }

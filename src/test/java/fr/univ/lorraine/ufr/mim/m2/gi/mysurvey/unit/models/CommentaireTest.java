@@ -14,9 +14,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.Mockito.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Classe de test pour la classe Commentaire.
+ *
+ * Cette classe teste les opérations CRUD pour la classe Commentaire en utilisant Mockito
+ * pour simuler les interactions avec les dépôts.
+ */
 @ExtendWith(MockitoExtension.class)
 class CommentaireTest {
 
@@ -35,6 +40,10 @@ class CommentaireTest {
     private Sondage sondage;
     private Participant participant;
 
+    /**
+     * Configuration initiale avant chaque test.
+     * Crée un Sondage et un Participant, et configure un Commentaire avec eux.
+     */
     @BeforeEach
     void setUp() {
         sondage = new Sondage();
@@ -48,6 +57,10 @@ class CommentaireTest {
         commentaire.setParticipant(participant);
     }
 
+    /**
+     * Teste la création d'un commentaire.
+     * Vérifie que le commentaire peut être sauvegardé et renvoyé correctement.
+     */
     @Test
     void testCreateCommentaire() {
         // Simulation de la méthode save() du repository
@@ -63,6 +76,10 @@ class CommentaireTest {
         assertEquals(participant, savedCommentaire.getParticipant());
     }
 
+    /**
+     * Teste la mise à jour d'un commentaire.
+     * Vérifie que le commentaire peut être mis à jour correctement.
+     */
     @Test
     void testUpdateCommentaire() {
         // Sauvegarde initiale avec la simulation
@@ -76,6 +93,10 @@ class CommentaireTest {
         assertEquals("Commentaire modifié", updatedCommentaire.getCommentaire());
     }
 
+    /**
+     * Teste la suppression d'un commentaire.
+     * Vérifie que la méthode delete est appelée sur le repository.
+     */
     @Test
     void testDeleteCommentaire() {
         // Simulation de la méthode delete()
@@ -88,4 +109,3 @@ class CommentaireTest {
         verify(commentaireRepository, times(1)).delete(commentaire);
     }
 }
-

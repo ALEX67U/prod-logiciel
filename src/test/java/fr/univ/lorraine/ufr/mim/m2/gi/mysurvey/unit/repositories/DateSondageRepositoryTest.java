@@ -13,14 +13,23 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Classe de test pour le DateSondageRepository.
+ *
+ * Cette classe teste les méthodes du repository liées aux dates de sondage.
+ */
 public class DateSondageRepositoryTest {
 
     @Mock
-    private DateSondageRepository dateSondageRepository; // Mock du repository
+    private DateSondageRepository dateSondageRepository; // Mock du repository pour les dates de sondage
 
     private DateSondage dateSondage1;
     private DateSondage dateSondage2;
 
+    /**
+     * Méthode exécutée avant chaque test.
+     * Elle initialise les mocks et crée des objets DateSondage pour les tests.
+     */
     @BeforeEach
     void setUp() {
         // Initialisation de Mockito
@@ -28,12 +37,16 @@ public class DateSondageRepositoryTest {
 
         // Initialisation des objets DateSondage
         dateSondage1 = new DateSondage();
-        dateSondage1.setDate(new java.util.Date()); // Ajoutez des valeurs appropriées ici
+        dateSondage1.setDate(new java.util.Date()); // Définir une date appropriée pour le test
 
         dateSondage2 = new DateSondage();
-        dateSondage2.setDate(new java.util.Date()); // Ajoutez des valeurs appropriées ici
+        dateSondage2.setDate(new java.util.Date()); // Définir une autre date appropriée pour le test
     }
 
+    /**
+     * Teste la méthode getAllBySondage du DateSondageRepository.
+     * Vérifie que le repository renvoie la liste correcte de dates de sondage pour un sondage donné.
+     */
     @Test
     void testGetAllBySondage() {
         // Simulation du comportement du mock pour la méthode getAllBySondage

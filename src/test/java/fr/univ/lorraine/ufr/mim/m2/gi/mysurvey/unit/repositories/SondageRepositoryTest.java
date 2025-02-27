@@ -12,17 +12,26 @@ import java.util.Optional;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Classe de test pour le SondageRepository.
+ *
+ * Cette classe teste les méthodes du repository liées aux sondages.
+ */
 public class SondageRepositoryTest {
 
     @Mock
-    private SondageRepository sondageRepository; // Mock du repository
+    private SondageRepository sondageRepository; // Mock du repository pour les sondages
 
     private Sondage sondage;
-
     private String nom;
+
+    /**
+     * Méthode exécutée avant chaque test.
+     * Elle initialise les mocks et crée un objet Sondage pour les tests.
+     */
     @BeforeEach
     void setUp() {
-        nom = "Sondage Test";
+        nom = "Sondage Test"; // Nom du sondage pour les tests
         // Initialisation des objets
         MockitoAnnotations.openMocks(this);
 
@@ -32,6 +41,10 @@ public class SondageRepositoryTest {
         sondage.setDescription("Description du sondage");
     }
 
+    /**
+     * Teste la méthode findById du SondageRepository.
+     * Vérifie que la méthode renvoie le sondage correct lorsqu'il est trouvé.
+     */
     @Test
     void testFindById() {
         // Configuration du mock pour renvoyer un sondage spécifique
@@ -49,8 +62,10 @@ public class SondageRepositoryTest {
         });
     }
 
-
-
+    /**
+     * Teste la méthode save du SondageRepository.
+     * Vérifie que la méthode renvoie le sondage sauvegardé.
+     */
     @Test
     void testSaveSondage() {
         // Test de la sauvegarde d'un sondage

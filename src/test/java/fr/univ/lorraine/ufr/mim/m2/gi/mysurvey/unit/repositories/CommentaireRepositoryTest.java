@@ -15,17 +15,27 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Classe de test pour le CommentaireService.
+ *
+ * Cette classe teste les interactions entre le service et le repository
+ * en se basant sur les commentaires associés à un sondage spécifique.
+ */
 public class CommentaireRepositoryTest {
 
     @Mock
-    private CommentaireRepository commentaireRepository;  // Mock du repository
+    private CommentaireRepository commentaireRepository;  // Mock du repository pour les commentaires
 
     @InjectMocks
-    private CommentaireService commentaireService;  // Service utilisant le repository
+    private CommentaireService commentaireService;  // Service utilisant le repository mocké
 
     private Commentaire commentaire1;
     private Commentaire commentaire2;
 
+    /**
+     * Méthode exécutée avant chaque test.
+     * Elle initialise les mocks et crée des objets Commentaire pour les tests.
+     */
     @BeforeEach
     void setUp() {
         // Initialisation de Mockito et des objets Commentaire
@@ -38,6 +48,10 @@ public class CommentaireRepositoryTest {
         commentaire2.setCommentaire("Deuxième commentaire");  // Utilisation de setCommentaire
     }
 
+    /**
+     * Teste la méthode getBySondageId du CommentaireService.
+     * Vérifie que le service renvoie la liste correcte de commentaires pour un sondage donné.
+     */
     @Test
     void testGetAllBySondage() {
         // Configuration du comportement du mock pour simuler la méthode getAllBySondage

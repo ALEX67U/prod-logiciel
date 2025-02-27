@@ -15,6 +15,12 @@ import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Classe de test pour la classe DateSondage.
+ *
+ * Cette classe teste les opérations de création, mise à jour, suppression
+ * et accès aux propriétés de l'objet DateSondage.
+ */
 @ExtendWith(MockitoExtension.class)
 class DateSondageTest {
 
@@ -27,6 +33,10 @@ class DateSondageTest {
     @InjectMocks
     private DateSondage dateSondage; // L'objet que nous testons
 
+    /**
+     * Configuration initiale avant chaque test.
+     * Crée une instance de DateSondage avec des valeurs par défaut.
+     */
     @BeforeEach
     void setUp() {
         // Initialisation des valeurs de l'entité DateSondage
@@ -36,6 +46,10 @@ class DateSondageTest {
         dateSondage.setDateSondee(Collections.singletonList(dateSondee));
     }
 
+    /**
+     * Teste la création d'un objet DateSondage.
+     * Vérifie que les valeurs sont correctement définies après la création.
+     */
     @Test
     void testCreateDateSondage() {
         // Crée une nouvelle instance de DateSondage pour simuler la création
@@ -48,6 +62,10 @@ class DateSondageTest {
         assertEquals(dateSondage.getDateSondee(), savedDateSondage.getDateSondee());
     }
 
+    /**
+     * Teste la mise à jour d'un objet DateSondage.
+     * Vérifie que la date peut être mise à jour correctement.
+     */
     @Test
     void testUpdateDateSondage() {
         // Initial date
@@ -70,7 +88,10 @@ class DateSondageTest {
         assertTrue(updatedDateSondage.getDateSondee().isEmpty());
     }
 
-
+    /**
+     * Teste la suppression d'une relation dans l'objet DateSondage.
+     * Vérifie que la relation avec Sondage peut être supprimée.
+     */
     @Test
     void testDeleteDateSondage() {
         // Simuler la suppression de la relation sondage
@@ -80,6 +101,10 @@ class DateSondageTest {
         assertNull(dateSondage.getSondage());
     }
 
+    /**
+     * Teste les getters et setters de l'objet DateSondage.
+     * Vérifie que les valeurs peuvent être définies et récupérées correctement.
+     */
     @Test
     void testGettersSetters() {
         // Test des getters et setters

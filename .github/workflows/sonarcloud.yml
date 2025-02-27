@@ -1,0 +1,41 @@
+name: Analyse SonarCloud
+
+on:
+        push:
+                branches:
+                        - main
+        pull_request:
+                branches:
+                        - main
+
+jobs:
+        sonarcloud:
+                runs-on: ubuntu-latest
+
+                steps:
+                        - name: Checkout du code
+                          uses: actions/checkout@v2
+
+                        - name: Configuration de Java
+                          uses: actions/setup-java@v2
+                          with:
+                                  distribution: 'temurin'
+                                  java-version: 11
+
+                        - name: Cache des dépendances Maven
+                          uses: actions/cache@v2
+                          with:
+                                  path: ~/.m2/repository
+                                  key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+                                  restore-keys: ${{ runner.os }}-maven
+
+                        - name: Compilation du projet
+                          run: mvn compile
+
+                        - name: Exécution des tests et génération du rapport de couverture
+                          run: mvn test jacoco:report
+
+                        - name: Analyse SonarCloud
+                          env:
+                                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+                          run: mvn sonar:sonar

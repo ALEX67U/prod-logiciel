@@ -1,6 +1,7 @@
 package fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.integration.models;
 
 import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.MySurveyApplication;
+import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.models.Choix;
 import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.models.DateSondage;
 import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.models.DateSondee;
 import fr.univ.lorraine.ufr.mim.m2.gi.mysurvey.models.Sondage;
@@ -17,6 +18,12 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Classe de test d'intégration pour les entités DateSondage.
+ *
+ * Cette classe teste les opérations CRUD (Create, Read, Update, Delete) sur les
+ * entités DateSondage et leur interaction avec le repository associé.
+ */
 @SpringBootTest(classes = MySurveyApplication.class)
 @Transactional
 class DateSondageIntegrationTest {
@@ -25,75 +32,93 @@ class DateSondageIntegrationTest {
     private DateSondageRepository dateSondageRepository;
 
     @Autowired
-    private SondageRepository sondageRepository; // Ajout du repository Sondage
+    private SondageRepository sondageRepository; // Injection du repository pour manipuler les sondages
 
-    private Sondage existingSondage; // Renommé pour éviter le conflit
-    private DateSondage existingDateSondage; // Renommé pour éviter le conflit
-    private DateSondee existingDateSondee; // Renommé pour éviter le conflit
+    private Sondage existingSondage; // Instance de sondage utilisée pour les tests
+    private DateSondage existingDateSondage; // Instance de date de sondage utilisée pour les tests
+    private DateSondee existingDateSondee; // Instance de date sondée utilisée pour les tests
 
+    /**
+     * Configuration préalable à l'exécution de chaque test.
+     * Crée un sondage, une date de sondage, et une date sondée pour les tests.
+     */
     @BeforeEach
     void setUp() {
+        // Initialisation d'un sondage test
         existingSondage = new Sondage();
         existingSondage.setNom("Sondage Test");
-        existingSondage = sondageRepository.save(existingSondage); // Sauvegarde le sondage
+        existingSondage = sondageRepository.save(existingSondage); // Sauvegarde du sondage en base
 
+        // Création d'une réponse à la date sondée
         existingDateSondee = new DateSondee();
-        existingDateSondee.setChoix("DISPONIBLE"); // Assurez-vous d'initialiser cette valeur
+        existingDateSondee.setChoix(Choix.DISPONIBLE.toString()); // Définition du choix de disponibilité
 
+        // Création d'une date de sondage associée au sondage
         existingDateSondage = new DateSondage();
-        existingDateSondage.setDate(new Date());
-        existingDateSondage.setSondage(existingSondage);
-        existingDateSondage.setDateSondee(Collections.singletonList(existingDateSondee));
+        existingDateSondage.setDate(new Date()); // Définition de la date actuelle
+        existingDateSondage.setSondage(existingSondage); // Association au sondage créé
+        existingDateSondage.setDateSondee(Collections.singletonList(existingDateSondee)); // Ajout des réponses sondées
     }
 
+    /**
+     * Teste la création d'une DateSondage.
+     * Vérifie que la date de sondage est correctement sauvegardée en base de données.
+     */
     @Test
     void testCreateDateSondage() {
-        // Sauvegarder la DateSondage dans la base de données
+        // Sauvegarde d'une nouvelle date de sondage
         DateSondage savedDateSondage = dateSondageRepository.save(existingDateSondage);
 
-        // Vérification après la sauvegarde
-        assertNotNull(savedDateSondage.getDateSondageId()); // Assurez-vous que l'ID est généré
-        assertEquals(existingDateSondage.getDate(), savedDateSondage.getDate());
-        assertEquals(existingSondage.getNom(), savedDateSondage.getSondage().getNom());
-        assertEquals(existingDateSondage.getDateSondee(), savedDateSondage.getDateSondee());
+        // Vérifications après l'enregistrement
+        assertNotNull(savedDateSondage.getDateSondageId()); // Vérifie que l'ID est bien généré
+        assertEquals(existingDateSondage.getDate(), savedDateSondage.getDate()); // Vérifie que la date est correcte
+        assertEquals(existingSondage.getNom(), savedDateSondage.getSondage().getNom()); // Vérifie l'association au sondage
+        assertEquals(existingDateSondage.getDateSondee(), savedDateSondage.getDateSondee()); // Vérifie la liste des réponses sondées
     }
 
+    /**
+     * Teste la mise à jour d'une DateSondage.
+     * Vérifie que la date de sondage peut être modifiée et sauvegardée.
+     */
     @Test
     void testUpdateDateSondage() {
-        // Créer un sondage
+        // Création d'un nouveau sondage
         Sondage newSondage = new Sondage();
-        // Configurez votre sondage ici si nécessaire
+        // Configuration du sondage si nécessaire
 
-        // Créer et sauvegarder la date de sondage
+        // Création et sauvegarde d'une nouvelle date de sondage
         DateSondage newDateSondage = new DateSondage();
-        newDateSondage.setDate(new Date()); // Ou une date spécifique
-        newDateSondage.setSondage(newSondage);
+        newDateSondage.setDate(new Date()); // Définition de la date
 
-        // Sauvegarder le sondage d'abord si vous avez une contrainte de clé étrangère
+        // Sauvegarde du sondage pour respecter les contraintes de clé étrangère
         Sondage savedSondage = sondageRepository.save(newSondage);
         newDateSondage.setSondage(savedSondage);
         DateSondage savedDateSondage = dateSondageRepository.save(newDateSondage);
 
-        // Modifier la date de sondage
-        Date newDate = new Date(); // ou une date différente pour la mise à jour
+        // Modification de la date de sondage
+        Date newDate = new Date(); // Définition d'une nouvelle date
         savedDateSondage.setDate(newDate);
 
-        // Sauvegarder les modifications
+        // Sauvegarde de la mise à jour
         DateSondage updatedDateSondage = dateSondageRepository.save(savedDateSondage);
 
-        // Vérifiez que la mise à jour a réussi
-        assertEquals(newDate, updatedDateSondage.getDate());
+        // Vérification de la mise à jour
+        assertEquals(newDate, updatedDateSondage.getDate()); // Vérifie que la date a bien été modifiée
     }
 
+    /**
+     * Teste la suppression d'une DateSondage.
+     * Vérifie que la date de sondage peut être supprimée de la base de données.
+     */
     @Test
     void testDeleteDateSondage() {
-        // Sauvegarder la DateSondage dans la base de données
+        // Sauvegarde d'une date de sondage pour le test de suppression
         DateSondage savedDateSondage = dateSondageRepository.save(existingDateSondage);
 
-        // Suppression
+        // Suppression de la date de sondage
         dateSondageRepository.delete(savedDateSondage);
 
-        // Vérification que la DateSondage n'existe plus
+        // Vérification que l'entité a bien été supprimée
         assertFalse(dateSondageRepository.findById(savedDateSondage.getDateSondageId()).isPresent());
     }
 }

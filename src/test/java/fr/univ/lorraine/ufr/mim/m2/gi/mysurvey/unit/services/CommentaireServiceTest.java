@@ -19,26 +19,35 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Classe de test pour le CommentaireService.
+ *
+ * Cette classe teste les fonctionnalités de gestion des commentaires.
+ */
 public class CommentaireServiceTest {
 
     @Mock
-    private CommentaireRepository commentaireRepository;
+    private CommentaireRepository commentaireRepository; // Mock du repository pour les commentaires
 
     @Mock
-    private SondageService sondageService;
+    private SondageService sondageService; // Mock du service pour les sondages
 
     @Mock
-    private ParticipantService participantService;
+    private ParticipantService participantService; // Mock du service pour les participants
 
     @InjectMocks
-    private CommentaireService commentaireService;
+    private CommentaireService commentaireService; // Service à tester
 
     private Commentaire commentaire1;
     private Commentaire commentaire2;
 
+    /**
+     * Méthode exécutée avant chaque test.
+     * Elle initialise les mocks et crée des objets Commentaire pour les tests.
+     */
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        MockitoAnnotations.openMocks(this); // Initialisation des mocks
 
         // Création de commentaires pour les tests
         commentaire1 = new Commentaire();
@@ -48,6 +57,10 @@ public class CommentaireServiceTest {
         commentaire2.setCommentaire("Deuxième commentaire");
     }
 
+    /**
+     * Teste la méthode getBySondageId du CommentaireService.
+     * Vérifie que les commentaires sont correctement récupérés par ID de sondage.
+     */
     @Test
     void testGetBySondageId() {
         // Configurer le mock pour la méthode getAllBySondage
@@ -65,9 +78,13 @@ public class CommentaireServiceTest {
         verify(commentaireRepository, times(1)).getAllBySondage(1L);
     }
 
+    /**
+     * Teste la méthode addCommantaire du CommentaireService.
+     * Vérifie que l'ajout d'un commentaire fonctionne correctement.
+     */
     @Test
     void testAddCommentaire() {
-        // Given
+        // Données de test
         Long sondageId = 1L;
         Long participantId = 1L;
         Commentaire commentaire = new Commentaire();
@@ -79,18 +96,22 @@ public class CommentaireServiceTest {
         when(participantService.getById(participantId)).thenReturn(participant);
         when(commentaireRepository.save(commentaire)).thenReturn(commentaire);
 
-        // When
+        // Appel de la méthode addCommentaire
         Commentaire result = commentaireService.addCommantaire(sondageId, participantId, commentaire);
 
-        // Then
+        // Vérifications des résultats
         assertNotNull(result, "Le commentaire ne doit pas être null");
         assertEquals(sondage, result.getSondage(), "Le sondage doit être correctement attribué");
         assertEquals(participant, result.getParticipant(), "Le participant doit être correctement attribué");
     }
 
+    /**
+     * Teste la méthode update du CommentaireService.
+     * Vérifie que la mise à jour d'un commentaire fonctionne correctement.
+     */
     @Test
     void testUpdate() {
-        // Given
+        // Données de test
         Long commentaireId = 1L;
         Commentaire commentaire = new Commentaire();
         commentaire.setCommentaireId(commentaireId);
@@ -100,17 +121,21 @@ public class CommentaireServiceTest {
         commentaire.setParticipant(participant);
 
         // Simuler le comportement de la méthode de mise à jour
-        when(commentaireRepository.findById(commentaireId)).thenReturn(java.util.Optional.of(commentaire));
+        when(commentaireRepository.findById(commentaireId)).thenReturn(Optional.of(commentaire));
         when(commentaireRepository.save(commentaire)).thenReturn(commentaire);
 
-        // When
+        // Appel de la méthode update
         Commentaire result = commentaireService.update(commentaireId, commentaire);
 
-        // Then
+        // Vérifications des résultats
         assertNotNull(result, "Le commentaire mis à jour ne doit pas être null");
         assertEquals(commentaireId, result.getCommentaireId(), "L'ID du commentaire doit être le même");
     }
 
+    /**
+     * Teste la méthode delete du CommentaireService.
+     * Vérifie que la suppression d'un commentaire fonctionne correctement.
+     */
     @Test
     void testDelete() {
         // Simuler un commentaire existant
@@ -126,6 +151,10 @@ public class CommentaireServiceTest {
         verify(commentaireRepository, times(1)).deleteById(1L);
     }
 
+    /**
+     * Teste la méthode delete du CommentaireService lorsque le commentaire n'est pas trouvé.
+     * Vérifie que la suppression retourne 0 si le commentaire n'existe pas.
+     */
     @Test
     void testDeleteNotFound() {
         // Simuler l'absence du commentaire
