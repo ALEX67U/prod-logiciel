@@ -28,12 +28,6 @@ class CommentaireTest {
     @Mock
     private CommentaireRepository commentaireRepository;
 
-    @Mock
-    private ParticipantRepository participantRepository;
-
-    @Mock
-    private SondageRepository sondageRepository;
-
     @InjectMocks
     private Commentaire commentaire; // l'objet que nous testons
 
