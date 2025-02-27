@@ -1,8 +1,0 @@
-.env
-*.iml
-*.log
-node_modules/
-target/
-.idea/
-*.md
-.git/
