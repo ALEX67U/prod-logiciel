@@ -2,8 +2,7 @@
 FROM openjdk:11-jre-slim
 
 # Étape 2: Ajouter le fichier JAR à l'image Docker
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
+COPY target/*.jar app.jar
 
 # Étape 3: Exposer le port sur lequel l'application écoutera
 EXPOSE 8080
