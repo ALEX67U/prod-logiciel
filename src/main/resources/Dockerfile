@@ -15,14 +15,22 @@ COPY src/ ./src/
 # Build de l'application
 RUN mvn clean package -DskipTests
 
-# Étape 2 : Image finale
+# Étape 2 : Image finale avec utilisateur non-root
 FROM openjdk:11-jre-slim
 
+# Créer un utilisateur non-root (ex: appuser) et créer un répertoire pour l'application
+RUN adduser --disabled-password --gecos '' appuser && \
+    mkdir /app && \
+    chown -R appuser:appuser /app
+
 # Copier le JAR généré depuis l'étape de build
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/target/*.jar /app/app.jar
+
+# Passer à l'utilisateur non-root
+USER appuser
 
 # Exposer le port 8080
 EXPOSE 8080
 
 # Commande pour démarrer l'application
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "/app/app.jar"]
