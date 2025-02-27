@@ -1,12 +1,18 @@
 FROM openjdk:11
 WORKDIR /app
 
-# Build de l'application (ça va créer le fichier JAR dans target/)
-COPY . .
+# Copier juste le pom.xml pour installer les dépendances
+COPY pom.xml .
 RUN apt-get update && apt-get install -y maven
+RUN mvn dependency:resolve
+
+# Copier uniquement le code source (sans target ni fichiers sensibles)
+COPY src/ ./src/
+
+# Build de l'application
 RUN mvn clean package -DskipTests
 
-# Copy du JAR vers l'image finale
+# Copier le JAR final dans le conteneur
 COPY target/*.jar app.jar
 
 EXPOSE 8080
