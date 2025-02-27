@@ -83,7 +83,7 @@ jobs:
           curl -X POST \
           -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
           -d '{}' \
-          https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploy
+          https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys
 
       # 13. Scan SonarCloud (commenté si tu veux l'activer)
       # - name: Scan SonarCloud
