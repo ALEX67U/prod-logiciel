@@ -72,36 +72,21 @@ jobs:
       - name: Exécuter le rapport Jacoco
         run: mvn jacoco:report
 
-      # 11. Construire l'image Docker avec le .jar génér
+      # 11. Construire l'image Docker avec le .jar généré
       - name: Build Docker Image
-        run: |
-          # Vérifie si le fichier .jar existe
-          if [ ! -f target/*.jar ]; then
-            echo "Le fichier .jar n'a pas été généré, arrêt du pipeline";
-            exit 1;
-          fi
+        run: docker build -f src/main/resources/Dockerfile -t my-app .
 
-          # Construire l'image Docker en spécifiant le chemin du Dockerfile et le contexte
-          docker build -f src/main/resources/Dockerfile -t my-app .
-      
-
-      # 12. Configurer l'identité Git
-      - name: Configure Git identity
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-
-      # 13. Pousser le code vers Render pour un déploiement automatique
-      - name: Push code to Render
+      # 12. Pousser le code vers Render pour un déploiement automatique
+      - name: Trigger Render deployment
         if: github.ref == 'refs/heads/main'
         run: |
-          git remote set-url origin https://github.com/${{ github.repository }}.git
-          git add .
-          git commit -m "Trigger Render deployment"
-          git push origin main
+          curl -X POST \
+          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+          -d '{}' \
+          https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploy
 
-        # 13. Scan SonarCloud (commenté si tu veux l'activer)
-        # - name: Scan SonarCloud
-        # env:
-        #   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        # run: mvn verify sonar:sonar -Dsonar.projectKey=prod_logiciel -Dsonar.organization=ALEX67U -Dsonar.host.url=https://sonarcloud.io
+      # 13. Scan SonarCloud (commenté si tu veux l'activer)
+      # - name: Scan SonarCloud
+      # env:
+      #   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      # run: mvn verify sonar:sonar -Dsonar.projectKey=prod_logiciel -Dsonar.organization=ALEX67U -Dsonar.host.url=https://sonarcloud.io
