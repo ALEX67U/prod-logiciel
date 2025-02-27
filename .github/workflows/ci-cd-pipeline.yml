@@ -78,8 +78,9 @@ jobs:
           ls -lh target/*.jar
 
       # 12. Construction de l'image Docker
-      - name: Build Docker Image
-        run: docker build -f ./Dockerfile -t my-app .
+      - name: Construire l'image Docker
+        run: docker build -f ./Dockerfile -t my-app ./  # Le point fait référence au répertoire courant
+
 
       # 13. Déploiement automatique sur Render
       - name: Trigger Render deployment
