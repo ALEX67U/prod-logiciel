@@ -1,36 +1,12 @@
-# Étape 1 : Build (multi-stage build)
-FROM maven:3.8.6-openjdk-11 AS build
-
-WORKDIR /app
-
-# Copier le pom.xml pour résoudre les dépendances Maven
-COPY pom.xml .
-
-# Résoudre les dépendances Maven sans copier tout le code source
-RUN mvn dependency:resolve
-
-# Copier le code source après avoir résolu les dépendances
-COPY src/ ./src/
-
-# Build de l'application
-RUN mvn clean package -DskipTests
-
-# Étape 2 : Image finale avec utilisateur non-root
+# Étape 1: Utiliser une image de base avec JDK 11
 FROM openjdk:11-jre-slim
 
-# Créer un utilisateur non-root (ex: appuser) et créer un répertoire pour l'application
-RUN adduser --disabled-password --gecos '' appuser && \
-    mkdir /app && \
-    chown -R appuser:appuser /app
+# Étape 2: Ajouter le fichier JAR à l'image Docker
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} app.jar
 
-# Copier le JAR généré depuis l'étape de build
-COPY --from=build /app/target/*.jar /app/app.jar
-
-# Passer à l'utilisateur non-root
-USER appuser
-
-# Exposer le port 8080
+# Étape 3: Exposer le port sur lequel l'application écoutera
 EXPOSE 8080
 
-# Commande pour démarrer l'application
-CMD ["java", "-jar", "/app/app.jar"]
+# Étape 4: Lancer l'application
+ENTRYPOINT ["java", "-jar", "/app.jar"]
