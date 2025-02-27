@@ -96,6 +96,6 @@ class ParticipantE2eTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        
+
     }
 }

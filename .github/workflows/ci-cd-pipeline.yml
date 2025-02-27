@@ -49,7 +49,7 @@ jobs:
 
       # 5. Exécuter les tests unitaires
       - name: Exécuter les tests unitaires
-        run: mvn test -Dtest=tests/**/*Test.java
+        run: mvn test -Dtest=test/**/*Test.java
 
       # 6. Attendre que la base de données soit prête
       - name: Attendre que la base de données soit prête
@@ -58,11 +58,11 @@ jobs:
 
       # 7. Exécuter les tests d'intégration
       - name: Exécuter les tests d'intégration
-        run: mvn verify -DskipUnitTests -Dtest=tests/**/*IT.java
+        run: mvn verify -DskipUnitTests -Dtest=test/**/*IT.java
 
       # 8. Exécuter les tests end-to-end (si applicable)
       - name: Exécuter les tests E2E
-        run: mvn verify -De2eTests -Dtest=tests/**/*E2ETest.java
+        run: mvn verify -De2eTests -Dtest=test/**/*E2ETest.java
 
       # 9. Exécuter les tests de vulnérabilité
       - name: Exécuter OWASP Dependency Check
